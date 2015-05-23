@@ -33,7 +33,7 @@ Secure the entire application with HTTP Basic Authentication middleware.
 
 Create an API for listing blog posts as JSON, secured with HTTP basic.
 
-### Challenge Seven: Talk to your API
+### Challenge Five: Talk to your API
 
 We'll create a javascript library that can be used to send data between your new API and your app.
 
