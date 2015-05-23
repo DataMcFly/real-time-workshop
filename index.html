@@ -1,425 +1,464 @@
 <!doctype html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
+	<head>
+		<meta charset="utf-8">
 
-        <title>Node.js Workshop</title>
+		<title>Real-time Workshop</title>
 
-        <meta name="description" content="A beginner-level introduction to node.js">
-        <meta name="author" content="Kevin Whinnery">
+		<meta name="description" content="An introduction to node.js, LevelDB and Socket.io for Real-time">
+		<meta name="author" content="Roger Stringer">
 
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <link rel="stylesheet" href="css/reveal.min.css">
-        <link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
 
-        <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
 
-        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
-        <script>
-            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-        </script>
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
 
-        <!--[if lt IE 9]>
-        <script src="lib/js/html5shiv.js"></script>
-        <![endif]-->
-    </head>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
 
-    <body>
+	<body>
 
-        <div class="reveal">
+		<div class="reveal">
 
-            <!-- Any section element inside of this container is displayed as a slide -->
-            <div class="slides">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
 
-                <section>
-                    <h1>node.js workshop</h1>
-                    <h3>the re-nodening</h3>
-                    <p>
-                        <small>Presented by <a href="http://www.kevinwhinnery.com">Kevin Whinnery</a> / 
-                        <a href="http://twitter.com/kevinwhinnery">@kevinwhinnery</a></small>
-                    </p>
-                </section>
+				<section>
+					<h1>Real-time API workshop</h1>
+					<h3><em>AKA</em> </h3>
+					<h2>How to Get Away with Real-time</h2>
+					<p>
+						<small>Presented by <a href="http://www.rogerstringer.com">Roger Stringer</a> / 
+						<a href="http://twitter.com/freekrai">@freekrai</a></small>
+					</p>
+				</section>
 
-                <section>
-                    <h1>Agenda</h1>
-                    <ul>
-                        <li>Why node.js?</li>
-                        <li>Node JavaScript Runtime Basics</li>
-                        <li>Routing and templating with Express</li>
-                        <li>Persistence Options</li>
-                        <li>Realtime Apps with Socket.io</li>
-                        <li>Sharing Code and Culture with the Client with Browserify</li>
-                        <li>Further Reading</li>
-                    </ul>
-                </section>
+				<section>
+					<h1>Agenda</h1>
+					<ul>
+						<li>Why node.js?</li>
+						<li>Node JavaScript Runtime Basics</li>
+						<li>Routing and templating with Express</li>
+						<li>Meet LevelDB</li>
+						<li>Talking to your API</li>						
+						<li>Real-time Apps with Socket.io</li>
+						<li>Sharing Code and Culture with the Client with Browserify</li>
+						<li>Further Reading</li>
+					</ul>
+				</section>
 
-                <section>
-                    <h1>doing is for doers</h1>
-                    <ul>
-                        <li>This is a workshop for DOers</li>
-                        <li>Lots of live code</li>
-                        <li>Lots of hands-on experimentation</li>
-                    </ul>
-                </section>
+				<section>
+					<h1>doing is for doers</h1>
+					<ul>
+						<li>This is a workshop for DOers</li>
+						<li>Lots of live code</li>
+						<li>Lots of hands-on experimentation</li>
+					</ul>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>why might I want to use node?</h1>
-                    </section>
-                    <section>
-                        <h2>JavaScript Everywhere</h2>
-                        <ul>
-                            <li>Code reuse (minimal)</li>
-                            <li>Same programming culture on client and server</li>
-                            <li>Lots of JavaScript programmers</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Vibrant Community</h2>
-                        <ul>
-                            <li>60,000+ packages on npm</li>
-                            <li>Top corporate sponsors</li>
-                            <li>Huge wealth of JS code</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Sweet Spots</h2>
-                        <ul>
-                            <li>Real-time/high concurrency apps (I/O Bound)</li>
-                            <li>API tier for single-page apps and rich clients (iOS, Android)</li>
-                            <li>Service orchestration</li>
-                            <li>Working with document (JSON-style) databases</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Not So Sweet Spots (For Now)</h2>
-                        <ul>
-                            <li>Simple CRUD Apps (Frameworks not as good)</li>
-                            <li>Not as fast as some for CPU-intensive stuff</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>why might I want to use node?</h1>
+					</section>
+					<section>
+						<h2>JavaScript Everywhere</h2>
+						<ul>
+							<li>Code reuse (minimal)</li>
+							<li>Same programming culture on client and server</li>
+							<li>Lots of JavaScript programmers</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Vibrant Community</h2>
+						<ul>
+							<li>60,000+ packages on npm</li>
+							<li>Top corporate sponsors</li>
+							<li>Huge wealth of JS code</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Sweet Spots</h2>
+						<ul>
+							<li>Real-time/high concurrency apps (I/O Bound)</li>
+							<li>API tier for single-page apps and rich clients (iOS, Android)</li>
+							<li>Service orchestration</li>
+							<li>Working with document (JSON-style) databases</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Not So Sweet Spots (For Now)</h2>
+						<ul>
+							<li>Simple CRUD Apps (Frameworks not as good)</li>
+							<li>Not as fast as some for CPU-intensive stuff</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>node.js basics</h1>
-                    </section>
-                    <section>
-                        <h2>What is node.js?</h2>
-                        <ul>
-                            <li>v8 JavaScript runtime</li>
-                            <li>Event driven</li>
-                            <li>Non-blocking standard libraries</li>
-                            <li>Most APIs speak <a href="http://strongloop.com/strongblog/practical-examples-of-the-new-node-js-streams-api/">Streams</a></li>
-                            <li>Extensible via C/C++ add-ons</li>
-                            <li>Provides a package manager and module system for JS/native extensions</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>What node is not</h2>
-                        <ul>
-                            <li>A framework like Django or Rails</li>
-                            <li>A new programming language</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Interactive Mode</h2>
-                        <ul>
-                            <li>Great for quick tests</li>
-                            <li>[Demo - node console]</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Standard libraries</h2>
-                        <ul>
-                            <li>Async by default</li>
-                            <li>Low level</li>
-                            <li>HTTP is first class citizen</li>
-                            <li>[Demo - hello world]</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Developing and Debugging</h2>
-                        <ul>
-                            <li>Lots of different choices</li>
-                            <li>nodemon (faster cycles)</li>
-                            <li>node-inspector (step-through debugging)</li>
-                            <li>[Demo - supervisor and debugging]</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>CommonJS Modules</h2>
-                        <ul>
-                            <li>Prevents pollution of the global scope</li>
-                            <li>Two Styles of module development</li>
-                            <li>[Demo - your own local modules]</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>npm</h2>
-                        <ul>
-                            <li>node's package manager (ruby gems)</li>
-                            <li>handles and resolves dependencies (Bundler)</li>
-                            <li>~60,000 modules available today (easy to publish)</li>
-                            <li>[Demo - npm init and shameless plug]</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>node.js basics</h1>
+					</section>
+					<section>
+						<h2>What is node.js?</h2>
+						<ul>
+							<li>v8 JavaScript runtime</li>
+							<li>Event driven</li>
+							<li>Non-blocking standard libraries</li>
+							<li>Most APIs speak <a href="http://strongloop.com/strongblog/practical-examples-of-the-new-node-js-streams-api/">Streams</a></li>
+							<li>Extensible via C/C++ add-ons</li>
+							<li>Provides a package manager and module system for JS/native extensions</li>
+						</ul>
+					</section>
+					<section>
+						<h2>What node is not</h2>
+						<ul>
+							<li>A framework like Django or Rails</li>
+							<li>A new programming language</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Interactive Mode</h2>
+						<ul>
+							<li>Great for quick tests</li>
+							<li>[Demo - node console]</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Standard libraries</h2>
+						<ul>
+							<li>Async by default</li>
+							<li>Low level</li>
+							<li>HTTP is first class citizen</li>
+							<li>[Demo - hello world]</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Developing and Debugging</h2>
+						<ul>
+							<li>Lots of different choices</li>
+							<li>nodemon (faster cycles)</li>
+							<li>node-inspector (step-through debugging)</li>
+							<li>[Demo - supervisor and debugging]</li>
+						</ul>
+					</section>
+					<section>
+						<h2>CommonJS Modules</h2>
+						<ul>
+							<li>Prevents pollution of the global scope</li>
+							<li>Two Styles of module development</li>
+							<li>[Demo - your own local modules]</li>
+						</ul>
+					</section>
+					<section>
+						<h2>npm</h2>
+						<ul>
+							<li>node's package manager (ruby gems)</li>
+							<li>handles and resolves dependencies (Bundler)</li>
+							<li>~60,000 modules available today (easy to publish)</li>
+							<li>[Demo - npm init and shameless plug]</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>Challenge One</h1>
-                    <p>and</p>
-                    <h1>Challenge Two</h1>
-                    <p>
-                        <a href="http://github.com/kwhinnery/node-workshop">get the code</a>
-                    </p>
-                </section>
+				<section>
+					<h1>Challenge One</h1>
+					<p>and</p>
+					<h1>Challenge Two</h1>
+					<p>
+						<a href="https://github.com/DataMcFly/real-time-workshop/">get the code</a>
+					</p>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>Routing and templating with express</h1>
-                    </section>
-                    <section>
-                        <h2>Express at a high level</h2>
-                        <ul>
-                            <li>Based on Connect (a bit like Rack)</li>
-                            <li>De facto standard framework of node web apps</li>
-                            <li>Minimalistic, unopinionated</li>
-                            <li>Supports a variety of middleware</li>
-                            <li>Alternatives: hapi, restify, geddy, koa</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Routes</h2>
-                        <ul>
-                            <li>Respond to HTTP requests with a callback</li>
-                            <li>Supports variable placement in routes</li>
-                            <li>Easy to serve JSON</li>
-                            <li>[Demo - some basic routing and HTTP testing in Chrome]</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Middleware</h2>
-                        <ul>
-                            <li>Some useful built in middleware (like bodyParser)</li>
-                            <li>Useful for preprocessing requests</li>
-                            <li>Authentication/Authorization</li>
-                            <li>[Demo - some simple middleware, and how to use it]</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>Routing and templating with express</h1>
+					</section>
+					<section>
+						<h2>Express at a high level</h2>
+						<ul>
+							<li>Based on Connect (a bit like Rack)</li>
+							<li>De facto standard framework of node web apps</li>
+							<li>Minimalistic, unopinionated</li>
+							<li>Supports a variety of middleware</li>
+							<li>Alternatives: hapi, restify, geddy, koa</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Routes</h2>
+						<ul>
+							<li>Respond to HTTP requests with a callback</li>
+							<li>Supports variable placement in routes</li>
+							<li>Easy to serve JSON</li>
+							<li>[Demo - some basic routing and HTTP testing in Chrome]</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Middleware</h2>
+						<ul>
+							<li>Some useful built in middleware (like bodyParser)</li>
+							<li>Useful for preprocessing requests</li>
+							<li>Authentication/Authorization</li>
+							<li>[Demo - some simple middleware, and how to use it]</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>Challenge Three</h1>
-                </section>
+				<section>
+					<h1>Challenge Three</h1>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>Persistence</h1>
-                    </section>
-                    <section>
-                        <h2>Popular node.js options</h2>
-                        <ul>
-                            <li>SQL libraries supported, but not especially popular</li>
-                            <li>Best community support is around Postgres (JSON column)</li>
-                            <li>Document stores more popular, good fit for JS</li>
-                            <li>MongoDB or CouchDB are popular primary durable data stores</li>
-                            <li>redis is popular for fast, in-memory data storage</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Mongoose</h2>
-                        <ul>
-                            <li>Object Document Mapper (ODM)</li>
-                            <li>Most popular ODM in npm</li>
-                            <li>Nice high level APIs</li>
-                            <li><a href="http://mongoosejs.com/docs/guide.html">Fairly extensive docs</a></li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Mongoose Concepts: Schema</h2>
-                        <ul>
-                            <li>MongoDB by default enforces no data format</li>
-                            <li>Mongoose does with the "Schema" object</li>
-                            <li>Schema: define data types, validation, instance, and "static" functions</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Mongoose Concepts: Model</h2>
-                        <ul>
-                            <li>Representation of a MongoDB document</li>
-                            <li>Synthesized from a Schema</li>
-                            <li>You use the Model to actually create, <a href="http://mongoosejs.com/docs/queries.html">query</a>, and modify documents</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Hosted MongoDB</h2>
-                        <ul>
-                            <li><a href="http://mongohq.com">MongoHQ</a></li>
-                            <li><a href="http://mongolab.com">Mongo Lab</a></li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>Meet LevelDB</h1>
+					</section>
+					<section>
+						<h2>Popular node.js options</h2>
+						<ul>
+							<li>SQL libraries supported, but not especially popular</li>
+							<li>Best community support is around Postgres (JSON column)</li>
+							<li>Document stores more popular, good fit for JS</li>
+							<li>MongoDB or CouchDB are popular primary durable data stores</li>
+							<li>redis is popular for fast, in-memory data storage</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Mongoose</h2>
+						<ul>
+							<li>Object Document Mapper (ODM)</li>
+							<li>Most popular ODM in npm</li>
+							<li>Nice high level APIs</li>
+							<li><a href="http://mongoosejs.com/docs/guide.html">Fairly extensive docs</a></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Mongoose Concepts: Schema</h2>
+						<ul>
+							<li>MongoDB by default enforces no data format</li>
+							<li>Mongoose does with the "Schema" object</li>
+							<li>Schema: define data types, validation, instance, and "static" functions</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Mongoose Concepts: Model</h2>
+						<ul>
+							<li>Representation of a MongoDB document</li>
+							<li>Synthesized from a Schema</li>
+							<li>You use the Model to actually create, <a href="http://mongoosejs.com/docs/queries.html">query</a>, and modify documents</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Hosted MongoDB</h2>
+						<ul>
+							<li><a href="http://mongohq.com">MongoHQ</a></li>
+							<li><a href="http://mongolab.com">Mongo Lab</a></li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>Challenge Four</h1>
-                </section>
+				<section>
+					<h1>Challenge Four</h1>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>Real time apps with socket.io</h1>
-                    </section>
-                    <section>
-                        <h2>Socket.io at a high level</h2>
-                        <ul>
-                            <li>Thin wrapper around <a href="http://www.html5rocks.com/en/tutorials/websockets/basics/">WebSockets</a></li>
-                            <li>Works in tandem with an HTTP Server</li>
-                            <li>Documentation: less than awesome, <a href="https://github.com/learnboost/socket.io/wiki">wiki is better</a> than site</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Key Features</h2>
-                        <ul>
-                            <li>Client/Server Push</li>
-                            <li>Broadcast</li>
-                            <li>Client "session" information</li>
-                            <li>Message namespaces</li>
-                            <li>Plain ol' WebSockets API as well</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>Talking to your API</h1>
+					</section>
+					<section>
+						<h2>What is Browserify?</h2>
+						<ul>
+							<li>node-style require in the browser!</li>
+							<li>self-contained node module environment</li>
+							<li>use local, core, or npm-installed modules</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Why would I want to use Browserify?</h2>
+						<ul>
+							<li>Helps you write modular code on the client</li>
+							<li>no futzing with client-side script loading</li>
+							<li>share client and server code</li>
+							<li>Have the same code style, package management, and module system as server! Why have two different paradigms?</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Fun Browserify Features</h2>
+						<ul>
+							<li>Provides browser shims for lots of node core</li>
+							<li>can provide modules with alternate entry points when used by browserify</li>
+							<li>Source Maps</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>Challenge Five</h1>
-                </section>
+				<section>
+					<h1>Challenge Five</h1>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>Sharing Code and Culture with Browserify</h1>
-                    </section>
-                    <section>
-                        <h2>What is Browserify?</h2>
-                        <ul>
-                            <li>node-style require in the browser!</li>
-                            <li>self-contained node module environment</li>
-                            <li>use local, core, or npm-installed modules</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Why would I want to use Browserify?</h2>
-                        <ul>
-                            <li>Helps you write modular code on the client</li>
-                            <li>no futzing with client-side script loading</li>
-                            <li>share client and server code</li>
-                            <li>Have the same code style, package management, and module system as server! Why have two different paradigms?</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Fun Browserify Features</h2>
-                        <ul>
-                            <li>Provides browser shims for lots of node core</li>
-                            <li>can provide modules with alternate entry points when used by browserify</li>
-                            <li>Source Maps</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>Real-time apps with socket.io</h1>
+					</section>
+					<section>
+						<h2>Socket.io at a high level</h2>
+						<ul>
+							<li>Thin wrapper around <a href="http://www.html5rocks.com/en/tutorials/websockets/basics/">WebSockets</a></li>
+							<li>Works in tandem with an HTTP Server</li>
+							<li>Documentation: less than awesome, <a href="https://github.com/learnboost/socket.io/wiki">wiki is better</a> than site</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Key Features</h2>
+						<ul>
+							<li>Client/Server Push</li>
+							<li>Broadcast</li>
+							<li>Client "session" information</li>
+							<li>Message namespaces</li>
+							<li>Plain ol' WebSockets API as well</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>Challenge Six</h1>
-                </section>
+				<section>
+					<h1>Challenge Six</h1>
+				</section>
 
-                <section>
-                    <section>
-                        <h1>Further Reading</h1>
-                    </section>
-                    <section>
-                        <h2>Moving To Production</h2>
-                        <ul>
-                            <li><a href="http://www.joyent.com/developers/node">Node In Production (Joyent)</a></li>
-                            <li>HTTP traffic fronted by Apache/Nginx (static content and load balancing)</li>
-                            <li>One node process per CPU core: <a href="http://nodejs.org/api/cluster.html">cluster</a></li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>VPS Options</h2>
-                        <ul>
-                            <li>Have had good experiences with Linode</li>
-                            <li>Use the Node KO <a href="http://www.linode.com/stackscripts/view/?StackScriptID=3127">stack script</a></li>
-                            <li><a href="https://github.com/nko2/website/blob/master/designs/blog/14-deploying-to-linode.md">More info</a></li>
-                            <li>Also hear good things about Digital Ocean</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>PaaS Options</h2>
-                        <ul>
-                            <li>Heroku</li>
-                            <li>Nodejitsu</li>
-                            <li>AppFog</li>
-                            <li>Red Hat OpenShift</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Streams</h2>
-                        <ul>
-                            <li>Foudational component for many APIs</li>
-                            <li><a href="https://github.com/substack/stream-handbook">Stream Handbook</a></li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>More Exercises and Reinforcement</h2>
-                        <ul>
-                            <li><a href="http://nodeschool.io/">nodeschool.io</a></li>
-                            <li>Learn You Node for Much Win!</li>
-                            <li>Streams Adventure</li>
-                        </ul>
-                    </section>
-                </section>
+				<section>
+					<section>
+						<h1>Sharing Code and Culture with Browserify</h1>
+					</section>
+					<section>
+						<h2>What is Browserify?</h2>
+						<ul>
+							<li>node-style require in the browser!</li>
+							<li>self-contained node module environment</li>
+							<li>use local, core, or npm-installed modules</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Why would I want to use Browserify?</h2>
+						<ul>
+							<li>Helps you write modular code on the client</li>
+							<li>no futzing with client-side script loading</li>
+							<li>share client and server code</li>
+							<li>Have the same code style, package management, and module system as server! Why have two different paradigms?</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Fun Browserify Features</h2>
+						<ul>
+							<li>Provides browser shims for lots of node core</li>
+							<li>can provide modules with alternate entry points when used by browserify</li>
+							<li>Source Maps</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
-                    <h1>@kevinwhinnery</h1>
-                    <h3>kw@twilio.com</h3>
-                </section>
 
-            </div>
 
-        </div>
+				<section>
+					<h1>Challenge Seven</h1>
+				</section>
 
-        <script src="lib/js/head.min.js"></script>
-        <script src="js/reveal.min.js"></script>
+				<section>
+					<section>
+						<h1>Further Reading</h1>
+					</section>
+					<section>
+						<h2>Moving To Production</h2>
+						<ul>
+							<li><a href="http://www.joyent.com/developers/node">Node In Production (Joyent)</a></li>
+							<li>HTTP traffic fronted by Apache/Nginx (static content and load balancing)</li>
+							<li>One node process per CPU core: <a href="http://nodejs.org/api/cluster.html">cluster</a></li>
+						</ul>
+					</section>
+					<section>
+						<h2>VPS Options</h2>
+						<ul>
+							<li>Have had good experiences with Linode</li>
+							<li>Use the Node KO <a href="http://www.linode.com/stackscripts/view/?StackScriptID=3127">stack script</a></li>
+							<li><a href="https://github.com/nko2/website/blob/master/designs/blog/14-deploying-to-linode.md">More info</a></li>
+							<li>Also hear good things about Digital Ocean</li>
+						</ul>
+					</section>
+					<section>
+						<h2>PaaS Options</h2>
+						<ul>
+							<li>Heroku</li>
+							<li>Nodejitsu</li>
+							<li>AppFog</li>
+							<li>Red Hat OpenShift</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Streams</h2>
+						<ul>
+							<li>Foudational component for many APIs</li>
+							<li><a href="https://github.com/substack/stream-handbook">Stream Handbook</a></li>
+						</ul>
+					</section>
+					<section>
+						<h2>More Exercises and Reinforcement</h2>
+						<ul>
+							<li><a href="http://nodeschool.io/">nodeschool.io</a></li>
+							<li>Learn You Node for Much Win!</li>
+							<li>Streams Adventure</li>
+						</ul>
+					</section>
+				</section>
 
-        <script>
+				<section>
+					<h1>@freekrai</h1>
+					<h3>roger@datamcfly.com</h3>
+				</section>
 
-            // Full list of configuration options available here:
-            // https://github.com/hakimel/reveal.js#configuration
-            Reveal.initialize({
-                controls: true,
-                progress: true,
-                history: true,
-                center: true,
+			</div>
 
-                theme: 'moon', //Reveal.getQueryHash().theme, // available themes are in /css/theme
-                transition: 'default', //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+		</div>
 
-                // Optional libraries used to extend on reveal.js
-                dependencies: [
-                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-                    { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-                    // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-                    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-                ]
-            });
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
 
-        </script>
+		<script>
 
-    </body>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'moon', //Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: 'default', //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
 </html>
