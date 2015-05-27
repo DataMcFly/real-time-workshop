@@ -80,6 +80,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 						<li>This is a workshop for DOers</li>
 						<li>Lots of live code</li>
 						<li>Lots of hands-on experimentation</li>
+						<li>Lots of Real-time goodness</li>
 					</ul>
 				</section>
 
@@ -110,13 +111,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>API tier for single-page apps and rich clients (iOS, Android)</li>
 							<li>Service orchestration</li>
 							<li>Working with document (JSON-style) databases</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Not So Sweet Spots (For Now)</h2>
-						<ul>
-							<li>Simple CRUD Apps (Frameworks not as good)</li>
-							<li>Not as fast as some for CPU-intensive stuff</li>
 						</ul>
 					</section>
 				</section>
@@ -169,14 +163,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 						</ul>
 					</section>
 					<section>
-						<h2>CommonJS Modules</h2>
-						<ul>
-							<li>Prevents pollution of the global scope</li>
-							<li>Two Styles of module development</li>
-							<li>[Demo - your own local modules]</li>
-						</ul>
-					</section>
-					<section>
 						<h2>npm</h2>
 						<ul>
 							<li>node's package manager (ruby gems)</li>
@@ -198,7 +184,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 
 				<section>
 					<section>
-						<h1>Routing and templating with express</h1>
+						<h1>Routing with express</h1>
 					</section>
 					<section>
 						<h2>Express at a high level</h2>
@@ -216,7 +202,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>Respond to HTTP requests with a callback</li>
 							<li>Supports variable placement in routes</li>
 							<li>Easy to serve JSON</li>
-							<li>[Demo - some basic routing and HTTP testing in Chrome]</li>
 						</ul>
 					</section>
 					<section>
@@ -225,8 +210,60 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>Some useful built in middleware (like bodyParser)</li>
 							<li>Useful for preprocessing requests</li>
 							<li>Authentication/Authorization</li>
-							<li>[Demo - some simple middleware, and how to use it]</li>
 						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Build your first node app</h1>
+					</section>
+					<section>
+						<h3>Declare Your Dependencies</h3>
+						<p>1. Create your package.json file</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm init
+npm install express --save
+npm install body-parser --save
+npm install method-override --save
+						</code></pre>
+						<p>2. Install dependencies</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm install
+						</code></pre>
+					</section>
+					<section>
+						<h3>3. Build your skeleton</h3>
+						<p>Create a file called <code>server.js</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var express = require('express');
+var http = require('http'); 
+var path = require('path');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({	extended: true	}));
+app.set('port', process.env.PORT || 5000);
+
+app.get('/', function(request, response) {
+	response.send("Hi");
+});
+
+http.createServer(app).listen(app.get('port'), function(){
+	console.log("Express server listening on port " + app.get('port'));
+});						</code></pre>
+					</section>
+					<section>
+						<h2>Test your app</h2>
+						<pre><code data-bespoke-autorun class="language-javascript">
+node server.js
+						</code></pre>
+						<p>Open your app in the browser:</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+http://localhost:5000/
+						</code></pre>
 					</section>
 				</section>
 
@@ -438,6 +475,9 @@ http.createServer(app).listen(app.get('port'), function(){
 					</section>
 					<section>
 						<h2>Test your app</h2>
+						<pre><code data-bespoke-autorun class="language-javascript">
+node server.js
+						</code></pre>
 						<p>Test POST</p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 curl -X POST -d '{"name":"data from curl"}' -H "Content-Type:application/json" http://localhost:5000/data/somekey
