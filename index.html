@@ -46,6 +46,19 @@
 						<a href="http://twitter.com/freekrai">@freekrai</a></small>
 					</p>
 				</section>
+				
+				<section>
+					<h1>About Roger Stringer</h1>
+					<div style="float:right;">
+						<img src="img/roger.png" />
+					</div>
+					<p>
+Roger is a DevOps engineer, author, speaker, and founder of Data McFly, a real-time app backend.
+					</p>
+					<p>
+While Roger likes to work with a variety of programming languages and platforms, his favourites usually involve JavaScript and PHP. 
+					</p>
+				</section>
 
 				<section>
 					<h1>Agenda</h1>
@@ -54,9 +67,9 @@
 						<li>Node JavaScript Runtime Basics</li>
 						<li>Routing and templating with Express</li>
 						<li>Meet LevelDB</li>
-						<li>Talking to your API</li>						
 						<li>Real-time Apps with Socket.io</li>
 						<li>Sharing Code and Culture with the Client with Browserify</li>
+						<li>Extending our Real-time API</li>
 						<li>Further Reading</li>
 					</ul>
 				</section>
@@ -226,6 +239,95 @@
 						<h1>Meet LevelDB</h1>
 					</section>
 					<section>
+						<h2>What is a database?</h2>
+						<p>A database is a tool for interacting with structured data, externalized from the core of our application</p>
+					</section>
+					<section>
+						<h2>What we need from a database?</h2>
+						<ul>
+							<li>Persistence</li>
+							<li>Performance</li>
+							<li>Simpliciy to access complex data</li>
+							<li>Sometimes shared access</li>
+							<li>Sometimes scalability</li>
+						</ul>
+					</section>
+					<section>
+						<h2>My Secret Ingredients for a Database</h2>
+					</section>
+					<section>
+						<h2>LevelUp!</h2>
+						<p>http://github.com/rvagg/node-levelup</p>
+						<p>The LevelDB library for Node.js</p>
+						<p>LevelDB is an ordered key-value store that can be embedded in ANY app</p>
+					</section>
+					<section>
+						<h2>What is LevelDB</h2>
+						<ul>
+							<li>LevelDB is a fast key-value storage library written at Google that provides an ordered mapping from string keys to string values.</li>
+							<li>Server-less</li>
+							<li>Stores JSON content</li>
+						</ul>
+					</section>
+					<section class="full-imgs">
+						<h2>LevelDB</h2><br><br>
+						<div>
+						<div style="width: 40%; float: right; display: inline-block; text-align: left;">basic features:
+						<ul>
+						<li data-bespoke-bullet>get</li>
+						<li data-bespoke-bullet>put</li>
+						<li data-bespoke-bullet>del</li>
+						<li data-bespoke-bullet>batch</li>
+						<li data-bespoke-bullet>ordered iterator</li>
+						</ul>
+						</div>
+						<div style="background:#fff; width: 50%; display: inline-block; float: left;"><img src="img/example_leveldb.png"></div>
+						</div>
+						</section>
+						<section>
+						<h2>LevelUp</h2>
+						<h3>
+						The Node.js binding for LevelDB,
+						let's build our database in Javascript!
+						</h3>
+						</section>
+						<section>
+						<h2>LevelUp</h2>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var db = level('your_database')
+db.put('a', 'b', function() {
+	db.put('b', 'c', function() {
+		db.get('a', function(err, data) {
+			alert(JSON.stringify(data))
+		})
+	})
+})
+						</code></pre>
+						</section>
+						<section>
+						<h2>ReadStream</h2>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var db = level('your_database')
+var stream = db.createReadStream({
+	start: 'a',
+	end: 'd'
+})
+stream.on('data', function(data) {
+	alert(JSON.stringify(data))
+})
+stream.on('end', function() {
+	alert('end!')
+})
+						</code></pre>
+					</section>
+					<section>
+						<h2>LevelUP's Ecosystem</h2>
+						<div style="background:#fff; width: 80%; display: inline-block; float: left;">
+							<img src="img/ecosystem.png" />
+						</div>
+					</section>
+<!--
+					<section>
 						<h2>Popular node.js options</h2>
 						<ul>
 							<li>SQL libraries supported, but not especially popular</li>
@@ -267,45 +369,93 @@
 							<li><a href="http://mongolab.com">Mongo Lab</a></li>
 						</ul>
 					</section>
+-->
+				</section>
+				<section>
+					<section>
+						<h1>Build a sample app</h1>
+					</section>
+					<section>
+						<h2>Let's put some LevelUP and Express together.</h2>
+					</section>
+					<section>
+						<h3>Declare Your Dependencies</h3>
+						<p>1. Create your package.json file</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm init
+npm install express --save
+npm install levelup --save
+npm install leveldown --save
+npm install body-parser --save
+npm install method-override --save
+						</code></pre>
+						<p>2. Install dependencies</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm install
+						</code></pre>
+					</section>
+					<section>
+						<h3>3. Build your skeleton</h3>
+						<p>Create a file called <code>server.js</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var express = require('express');
+var http = require('http'); 
+var path = require('path');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var levelup = require ('levelup');
+	
+
+var database = './test';
+var db = levelup (database, {keyEncoding: 'json', valueEncoding: 'json'});
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({	extended: true	}));
+app.set('port', process.env.PORT || 5000);
+
+app.get('/data/:key', function(request, response) {
+	var key = request.param('key');
+console.log( key );
+	db.get(key, function(err, data) {
+		response.send( JSON.stringify(data) );
+	})	
+});
+app.post('/data/:key', function(request, response) {
+	var key = request.param('key');
+	var json = request.body;
+
+	db.put(key, json, function() {
+		db.get(key, function(err, data) {
+			response.send( "Saved data: " + JSON.stringify(data) )
+		})
+	})
+});
+
+http.createServer(app).listen(app.get('port'), function(){
+	console.log("Express server listening on port " + app.get('port'));
+});						</code></pre>
+					</section>
+					<section>
+						<h2>Test your app</h2>
+						<p>Test POST</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+curl -X POST -d '{"name":"data from curl"}' -H "Content-Type:application/json" http://localhost:5000/data/somekey
+						</code></pre>
+						<p>GET the key somekey:</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+curl -x GET http://localhost:5000/data/somekey/data/somekey
+						</code></pre>
+					</section>
+					<section>
+						<h2>It Works!!!</h2>
+						<p>Great, we have a LevelUP-powered API, but it's not exactly real-time is it?</p>
+						<p>In the next unit, we'll look at Socket.io and how to make it work with our API</p>
+					</section>
 				</section>
 
 				<section>
 					<h1>Challenge Four</h1>
-				</section>
-
-				<section>
-					<section>
-						<h1>Talking to your API</h1>
-					</section>
-					<section>
-						<h2>What is Browserify?</h2>
-						<ul>
-							<li>node-style require in the browser!</li>
-							<li>self-contained node module environment</li>
-							<li>use local, core, or npm-installed modules</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Why would I want to use Browserify?</h2>
-						<ul>
-							<li>Helps you write modular code on the client</li>
-							<li>no futzing with client-side script loading</li>
-							<li>share client and server code</li>
-							<li>Have the same code style, package management, and module system as server! Why have two different paradigms?</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Fun Browserify Features</h2>
-						<ul>
-							<li>Provides browser shims for lots of node core</li>
-							<li>can provide modules with alternate entry points when used by browserify</li>
-							<li>Source Maps</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<h1>Challenge Five</h1>
 				</section>
 
 				<section>
@@ -333,7 +483,7 @@
 				</section>
 
 				<section>
-					<h1>Challenge Six</h1>
+					<h1>Challenge Five</h1>
 				</section>
 
 				<section>
@@ -368,6 +518,18 @@
 				</section>
 
 
+				<section>
+					<h1>Challenge Six</h1>
+				</section>
+
+				<section>
+					<section>
+						<h2>Extending our Real-time API</h2>
+					</section>
+					<section>
+						
+					</section>
+				</section>
 
 				<section>
 					<h1>Challenge Seven</h1>
