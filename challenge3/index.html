@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+<script>
+	var chat = io.connect('http://localhost:5000/');
+	chat.on('connect', function () {
+		var json = {
+			"name":"Roger"	
+		};
+		chat.emit('set', {key: "test", data: json});
+		chat.on('value', function(data){
+			console.log( data );
+		});
+	});
+</script>
+</body>
+</html>
