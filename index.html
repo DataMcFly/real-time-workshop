@@ -65,7 +65,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 					<ul>
 						<li>Why node.js?</li>
 						<li>Node JavaScript Runtime Basics</li>
-						<li>Routing and templating with Express</li>
+						<li>Routing with Express</li>
 						<li>Meet LevelDB</li>
 						<li>Real-time Apps with Socket.io</li>
 						<li>Sharing Code and Culture with the Client with Browserify</li>
@@ -141,7 +141,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 						<h2>Interactive Mode</h2>
 						<ul>
 							<li>Great for quick tests</li>
-							<li>[Demo - node console]</li>
 						</ul>
 					</section>
 					<section>
@@ -150,7 +149,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>Async by default</li>
 							<li>Low level</li>
 							<li>HTTP is first class citizen</li>
-							<li>[Demo - hello world]</li>
 						</ul>
 					</section>
 					<section>
@@ -159,7 +157,6 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>Lots of different choices</li>
 							<li>nodemon (faster cycles)</li>
 							<li>node-inspector (step-through debugging)</li>
-							<li>[Demo - supervisor and debugging]</li>
 						</ul>
 					</section>
 					<section>
@@ -168,15 +165,12 @@ While Roger likes to work with a variety of programming languages and platforms,
 							<li>node's package manager (ruby gems)</li>
 							<li>handles and resolves dependencies (Bundler)</li>
 							<li>~60,000 modules available today (easy to publish)</li>
-							<li>[Demo - npm init and shameless plug]</li>
 						</ul>
 					</section>
 				</section>
 
 				<section>
 					<h1>Challenge One</h1>
-					<p>and</p>
-					<h1>Challenge Two</h1>
 					<p>
 						<a href="https://github.com/DataMcFly/real-time-workshop/">get the code</a>
 					</p>
@@ -237,7 +231,6 @@ npm install
 						<p>Create a file called <code>server.js</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var express = require('express');
-var http = require('http'); 
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -247,13 +240,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({	extended: true	}));
 app.set('port', process.env.PORT || 5000);
 
+var server = require('http').Server(app);
+
 app.get('/', function(request, response) {
 	response.send("Hi");
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+server.listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
-});						</code></pre>
+});
+						</code></pre>
 					</section>
 					<section>
 						<h2>Test your app</h2>
@@ -268,7 +264,7 @@ http://localhost:5000/
 				</section>
 
 				<section>
-					<h1>Challenge Three</h1>
+					<h1>Challenge Two</h1>
 				</section>
 
 				<section>
@@ -363,51 +359,8 @@ stream.on('end', function() {
 							<img src="img/ecosystem.png" />
 						</div>
 					</section>
-<!--
-					<section>
-						<h2>Popular node.js options</h2>
-						<ul>
-							<li>SQL libraries supported, but not especially popular</li>
-							<li>Best community support is around Postgres (JSON column)</li>
-							<li>Document stores more popular, good fit for JS</li>
-							<li>MongoDB or CouchDB are popular primary durable data stores</li>
-							<li>redis is popular for fast, in-memory data storage</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Mongoose</h2>
-						<ul>
-							<li>Object Document Mapper (ODM)</li>
-							<li>Most popular ODM in npm</li>
-							<li>Nice high level APIs</li>
-							<li><a href="http://mongoosejs.com/docs/guide.html">Fairly extensive docs</a></li>
-						</ul>
-					</section>
-					<section>
-						<h2>Mongoose Concepts: Schema</h2>
-						<ul>
-							<li>MongoDB by default enforces no data format</li>
-							<li>Mongoose does with the "Schema" object</li>
-							<li>Schema: define data types, validation, instance, and "static" functions</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Mongoose Concepts: Model</h2>
-						<ul>
-							<li>Representation of a MongoDB document</li>
-							<li>Synthesized from a Schema</li>
-							<li>You use the Model to actually create, <a href="http://mongoosejs.com/docs/queries.html">query</a>, and modify documents</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Hosted MongoDB</h2>
-						<ul>
-							<li><a href="http://mongohq.com">MongoHQ</a></li>
-							<li><a href="http://mongolab.com">Mongo Lab</a></li>
-						</ul>
-					</section>
--->
 				</section>
+
 				<section>
 					<section>
 						<h1>Build a sample app</h1>
@@ -436,7 +389,6 @@ npm install
 						<p>Create a file called <code>server.js</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var express = require('express');
-var http = require('http'); 
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -451,6 +403,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({	extended: true	}));
 app.set('port', process.env.PORT || 5000);
 
+var server = require('http').Server(app);
+
 app.get('/data/:key', function(request, response) {
 	var key = request.param('key');
 console.log( key );
@@ -464,14 +418,15 @@ app.post('/data/:key', function(request, response) {
 
 	db.put(key, json, function() {
 		db.get(key, function(err, data) {
-			response.send( "Saved data: " + JSON.stringify(data) )
+			response.send( JSON.stringify(data) )
 		})
 	})
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+server.listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
-});						</code></pre>
+});
+						</code></pre>
 					</section>
 					<section>
 						<h2>Test your app</h2>
@@ -489,13 +444,13 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 					</section>
 					<section>
 						<h2>It Works!!!</h2>
-						<p>Great, we have a LevelUP-powered API, but it's not exactly real-time is it?</p>
+						<p>Great, we have a LevelUP-powered API, but it's not exactly real-time yet is it?</p>
 						<p>In the next unit, we'll look at Socket.io and how to make it work with our API</p>
 					</section>
 				</section>
 
 				<section>
-					<h1>Challenge Four</h1>
+					<h1>Challenge Three</h1>
 				</section>
 
 				<section>
@@ -523,7 +478,131 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 				</section>
 
 				<section>
-					<h1>Challenge Five</h1>
+					<section>
+						<h1>Build a sample app</h1>
+					</section>
+					<section>
+						<h2>Let's add some socket.io to our app.</h2>
+					</section>
+					<section>
+						<h3>Declare Your Dependencies</h3>
+						<p>1. Create your package.json file</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm init
+npm install express --save
+npm install levelup --save
+npm install leveldown --save
+npm install body-parser --save
+npm install method-override --save
+npm install socket.io --save
+						</code></pre>
+						<p>2. Install dependencies</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm install
+						</code></pre>
+					</section>
+					<section>
+						<h3>3. Build your skeleton</h3>
+						<p>Create a file called <code>server.js</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var levelup = require ('levelup');	
+
+var database = './test';
+var db = levelup (database, {keyEncoding: 'json', valueEncoding: 'json'});
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({	extended: true	}));
+app.set('port', process.env.PORT || 5000);
+var server = require('http').Server(app);
+
+//	real-time socket listeners...
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+	socket.emit('news', { hello: 'world' });
+	socket.on('get', function (data) {
+		var key = data.key;
+		db.get(key, function(err, data) {
+			console.log( JSON.stringify(data) );
+			socket.emit('value', data );
+		});	
+	});
+
+	socket.on('set', function (data) {
+		var key = data.key;
+		var json = data.data;
+		
+		db.put(key, json, function() {
+			db.get(key, function(err, data) {
+				console.log( JSON.stringify(data) )
+				socket.emit('value', data );
+			});
+		});
+	});
+});
+
+
+//	api end points...
+
+app.get('/data/:key', function(request, response) {
+	var key = request.param('key');
+
+	db.get(key, function(err, data) {
+		response.send( JSON.stringify(data) );
+	})	
+});
+app.post('/data/:key', function(request, response) {
+	var key = request.param('key');
+	var json = request.body;
+
+	db.put(key, json, function() {
+		db.get(key, function(err, data) {
+			response.send( JSON.stringify(data) )
+		})
+	})
+});
+
+app.get('/', function(request, response){
+	response.sendfile("./index.html" );
+});
+
+server.listen(app.get('port'), function(){
+	console.log("Express server listening on port " + app.get('port'));
+});
+						</code></pre>
+					</section>
+					<section>
+						<h3>4. Test Your App</h3>
+						<p>Create a file called <code>index.html:</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js">&lt;/script>
+&lt;script>
+	var chat = io.connect('http://localhost:5000/');
+	chat.on('connect', function () {
+		var json = {
+			"name":"Roger"	
+		};
+		chat.emit('set', {key: "test", data: json});
+		chat.on('value', function(data){
+			console.log( data );
+		});
+	});
+&lt;/script>
+						</code></pre>
+						<p>Open the app in your browser: </p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+http://localhost:5000/
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h1>Challenge Four</h1>
 				</section>
 
 				<section>
@@ -557,9 +636,21 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 					</section>
 				</section>
 
+				<section>
+					<section>
+						<h1>Build a sample app</h1>
+					</section>
+					<section>
+						<h2>Let's use browserify to build a client.</h2>
+					</section>
+					<section>
+						<p>We want to use browserify to build a client for our API that can work either client or server side.</p>
+						
+					</section>
+				</section>
 
 				<section>
-					<h1>Challenge Six</h1>
+					<h1>Challenge Five</h1>
 				</section>
 
 				<section>
@@ -567,12 +658,12 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 						<h2>Extending our Real-time API</h2>
 					</section>
 					<section>
-						
+						<p>Let's build some actual apps using our brand new API now</p>
 					</section>
 				</section>
 
 				<section>
-					<h1>Challenge Seven</h1>
+					<h1>Challenge Six</h1>
 				</section>
 
 				<section>
@@ -608,7 +699,7 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 					<section>
 						<h2>Streams</h2>
 						<ul>
-							<li>Foudational component for many APIs</li>
+							<li>Foundational component for many APIs</li>
 							<li><a href="https://github.com/substack/stream-handbook">Stream Handbook</a></li>
 						</ul>
 					</section>
