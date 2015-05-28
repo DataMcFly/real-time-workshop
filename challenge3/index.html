@@ -11,7 +11,10 @@
 			"name":"Roger"	
 		};
 		chat.emit('set', {key: "test", data: json});
-		chat.on('value', function(data){
+		chat.emit('get', {key: "test", data: json}).on('value', function(data){
+			console.log( data );
+		});
+		chat.on('added', function(data){
 			console.log( data );
 		});
 	});

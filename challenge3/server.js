@@ -17,7 +17,6 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
-	socket.emit('news', { hello: 'world' });
 	socket.on('get', function (data) {
 		var key = data.key;
 		db.get(key, function(err, data) {
@@ -32,7 +31,8 @@ io.on('connection', function (socket) {
 		
 		db.put(key, json, function() {
 			db.get(key, function(err, data) {
-				console.log( JSON.stringify(data) )
+				console.log( JSON.stringify(data) );
+				socket.emit('added', data );
 				socket.emit('value', data );
 			});
 		});

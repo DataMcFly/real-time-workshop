@@ -4,50 +4,26 @@ A intro to building a real-time backend API using node.js, LevelDB, and Socket.i
 
 ## Challenges
 
-### Challenge One: Standard Libraries
+### Challenge One: Routing
 
-Using node's standard libraries `http` and `fs` and built-in JSON support, read in a comma-seprated file of key-value pairs, and create an HTTP server which returns the file's contents as JSON.
+Using Node.js and the express.js module, build a simple node.js server which returns a single message.
 
-### Challenge Two: CommonJS Modules
+### Challenge Two: Meet LevelDB
 
-Create two new CommonJS modules in a project directory.  One module should expose an instantiable object called "Person". Your 
-constructor should accept a JavaScript object literal, which will have properties to assign to the Person. Every person should have a property `knowsKungFu` set to `false`.  The constructor should be able to override this. To accomplish this, install `underscore` from npm and use it's `_.extend` function in your constructor.
+Using the LevelUP module, add two endpoints, one that receives data and one that sends data.
 
-Your second custom module will be a custom logger, which will have an `info` logging function.  This function should print out the current date and time, as well as the given log message.
+The receiving endpoint will save data in an Leveldb database and the sending endpoint will retrieve the requested data and send it back.
 
-### Challenge Three: Express and Request Routing
+### Challenge Three: Socket.io
 
-Create an Express application which responds to an HTTP `GET` request, and renders an HTML page using the EJS template engine. This HTML page should contain a form, which issues a `POST` action to log in a user, then redirect back to the same page.
+Use Socket.io to add real-time interaction between your Leveldb app and your client-side app.
 
-The `POST` action should store the user's username somehow - either in memory (store in an object) or in a cookie.  On every `GET` request to the form, the app should check for a logged-in user using connect middleware.  If the username has been stored, it should be displayed in the HTML page using a context variable for the EJS template engine.
+Create two types of emitters: `set` and `get` which can be passed a key to either save data to or to retrieve.
 
-### Challenge Four: Intro to LevelDB
+Create two types of listeners: `value` and `added`, added will return any new data when it is added and value will return specified data, or can also be used to return all data.
 
-Install the LevelDB library.  Use this connection string to authorize a Mongoose application that will have a single model, a blog post with a `title` and a `body`.  Using Express, create a simple application that will save a new blog post, and list out all existing blog posts on an HTML page.
+### Challenge Four: Browserify
 
-#### Bonus Challenge
+Install the browserify package from npm globally - `npm install -g browserify`. The file "client.js" contains node.js-style code that uses both core node and third party modules from npm.  Use the browserify command line utility to create a browser-ready version of `client.js` called `commandline.js`, which should reside in the "public" directory of the project.
 
-Secure the entire application with HTTP Basic Authentication middleware.
-
-#### Bonus Challenge
-
-Create an API for listing blog posts as JSON, secured with HTTP basic.
-
-### Challenge Five: Talk to your API
-
-We'll create a javascript library that can be used to send data between your new API and your app.
-
-
-### Challenge Six: Chatting with Socket.io
-
-
-Let's extend our API with 
-
-Create a simple chat room application using socket.io.  Starting with the simple chat example, add the ability for each user to add a nickname for themselves.  You will need to store some "session" information about each socket connection.  Consult the [socket.io docs](http://socket.io/#how-to-use) for guidance on how to do this.
-
-
-### Challenge Seven: Browserify
-
-Install the browserify package from npm globally - `npm install -g browserify`. The file "browser.js" contains node.js-style code that uses both core node and third party modules from npm.  Use the browserify command line utility to create a browser-ready version of `browser.js` called `commandline.js`, which should reside in the "public" directory of the project.
-
-You will also want to check out the npm module `browserify-middleware`.  This module works with express to always serve the most recent version of your browserified source, and includes source maps so you can view and debug individual files.  In `app.js`, figure out how to use browserify-middleware to serve up a file called `middleware.js` to the browser, which contains the browserified contents of `browser.js`.
+You will also want to check out the npm module `browserify-middleware`.  This module works with express to always serve the most recent version of your browserified source, and includes source maps so you can view and debug individual files.  In `app.js`, figure out how to use browserify-middleware to serve up a file called `middleware.js` to the browser, which contains the browserified contents of `client.js`.
