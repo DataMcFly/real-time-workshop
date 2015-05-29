@@ -91,10 +91,10 @@ While Roger likes to work with a variety of programming languages and platforms,
 					</section>
 
 					<section>
-						<h2>Realtime Data</h2>
+						<h2>Real-time Data</h2>
 						<p class="text-small">
 							<a href="http://en.wikipedia.org/wiki/Real-time_data">
-								Realtime data denotes information that is <br /> delivered immediately after collection
+								Real-time data denotes information that is <br /> delivered immediately after collection
 							</a>
 						</p>
 						<p>
@@ -103,29 +103,27 @@ While Roger likes to work with a variety of programming languages and platforms,
 					</section>
 	
 					<section>
-						<p>Realtime data gives your users a premium experience</p>
-						<p class="fragment">Realtime data is the best data</p>
+						<p>Real-time data gives your users a premium experience</p>
+						<p class="fragment">Real-time data is the best data</p>
 					</section>
 	
 					<section>
-						<!-- Realtime Data is the Future -->
-						<div class="fragment">
-							<p class="text-medium">Twitter</p>
-							<small class="text-small">The pulse of the world, in realtime</small>
-						</div>
+						<!-- Real-time Data is the Future -->
+						<p class="text-medium">Twitter</p>
+						<small class="text-small">The pulse of the world, in real-time</small>
 						<div class="fragment">
 							<p class="text-medium">Uber</p>
-							<small class="text-small">Come get me, in realtime</small>
+							<small class="text-small">Come get me, in real-time</small>
 						</div>
 						<div class="fragment">
 							<p class="text-medium">Google Docs</p>
-							<small class="text-small">Collobrate and sync documents, in realtime</small>
+							<small class="text-small">Collobrate and sync documents, in real-time</small>
 						</div>
 						<!-- <p class="fragment">Instacart</p>
-						<small class="fragment">See your groceries delivered, in realtime</small> -->
+						<small class="fragment">See your groceries delivered, in real-time</small> -->
 						<div class="fragment">
 							<p class="text-medium">Facebook</p>
-							<small class="text-small">Share cat photos, in realtime</small>
+							<small class="text-small">Share cat photos, in real-time</small>
 						</div>
 	
 						<div class="fragment">
@@ -136,7 +134,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 					</section>
 	
 					<section>
-						<h2>Realtime Data is Hard</h2>
+						<h2>Real-time Data is Hard</h2>
 						<p>
 							Keeping data in sync across thousands of clients
 						</p>
@@ -172,7 +170,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 	
 					<section>
 						<p class="text-medium">Data transport is only a small part of the problem</p>
-						<p class="text-small">Realtime message passing !== Realtime data sync</p>
+						<p class="text-small">Real-time message passing !== Real-time data sync</p>
 						<p class="text-small fragment"></p>
 						<!-- <p class="text-medium">The real issue is fast data sync across multiple clients</p> -->
 					</section>
@@ -199,16 +197,24 @@ While Roger likes to work with a variety of programming languages and platforms,
 					<section>
 						<h2>Ok, so how do we build a real-time API?</h2>
 						<div class="fragment">
-							<p>1. You need a language: <em>Node.js</em></p>
+							<p>1. You need a language: <span class="fragment"><em>Node.js</em></span></p>
 						</div>						
 						<div class="fragment">
-							<p>2. You need a database: <em>LevelDB</em></p>
+							<p>2. You need a database: <span class="fragment"><em>LevelDB</em></span></p>
 						</div>
 						<div class="fragment">
-							<p>3. You need a real-time transport: <em>Socket.io</em></p>
+							<p>3. You need a real-time transport: <span class="fragment"><em>Socket.io</em></span></p>
 						</div>
 						<div class="fragment">
-							<p>4. You need a client-side client library: <em>Browserify</em></p>
+							<p>4. You need a client-side client library: <span class="fragment"><em>Browserify</em></span></p>
+						</div>
+						<div class="fragment">
+							<p>
+								<span class="fragment">You</span>
+								<span class="fragment">Can</span>
+								<span class="fragment">Haaz</span>
+								<span class="fragment">Real-Time !!!</span>
+							</p>
 						</div>
 					</section>
 				</section>
@@ -858,7 +864,7 @@ app.post('/data/:key', function(request, response) {
 });
 
 var browserifySrc = path.join(process.cwd(), 'client.js');
-app.use('/realtime.js', browserify(browserifySrc));
+app.use('/real-time.js', browserify(browserifySrc));
 
 app.get('/', function(request, response){
 	response.sendfile("./index.html" );
@@ -892,7 +898,7 @@ chat.on('connect', function () {
 						</code></pre>
 						<p>Open the app in your browser: </p>
 						<pre><code data-bespoke-autorun class="language-javascript">
-http://localhost:5000/realtime.js
+http://localhost:5000/real-time.js
 						</code></pre>
 						<p> You've now built a browerified library that can work the same in the browser as it does server-side.</p>
 					</section>
