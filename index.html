@@ -63,6 +63,7 @@ While Roger likes to work with a variety of programming languages and platforms,
 				<section>
 					<h1>Agenda</h1>
 					<ul>
+						<li>The need for real-time data</li>
 						<li>Why node.js?</li>
 						<li>Node JavaScript Runtime Basics</li>
 						<li>Routing with Express</li>
@@ -84,6 +85,141 @@ While Roger likes to work with a variety of programming languages and platforms,
 					</ul>
 				</section>
 
+				<section>
+					<section>
+						<h1>The Need For Real-time</h1>
+					</section>
+
+					<section>
+						<h2>Realtime Data</h2>
+						<p class="text-small">
+							<a href="http://en.wikipedia.org/wiki/Real-time_data">
+								Realtime data denotes information that is <br /> delivered immediately after collection
+							</a>
+						</p>
+						<p>
+							Push data rather than request it
+						</p>
+					</section>
+	
+					<section>
+						<p>Realtime data gives your users a premium experience</p>
+						<p class="fragment">Realtime data is the best data</p>
+					</section>
+	
+					<section>
+						<!-- Realtime Data is the Future -->
+						<div class="fragment">
+							<p class="text-medium">Twitter</p>
+							<small class="text-small">The pulse of the world, in realtime</small>
+						</div>
+						<div class="fragment">
+							<p class="text-medium">Uber</p>
+							<small class="text-small">Come get me, in realtime</small>
+						</div>
+						<div class="fragment">
+							<p class="text-medium">Google Docs</p>
+							<small class="text-small">Collobrate and sync documents, in realtime</small>
+						</div>
+						<!-- <p class="fragment">Instacart</p>
+						<small class="fragment">See your groceries delivered, in realtime</small> -->
+						<div class="fragment">
+							<p class="text-medium">Facebook</p>
+							<small class="text-small">Share cat photos, in realtime</small>
+						</div>
+	
+						<div class="fragment">
+							<br />
+							<p class="text-medium">Common Denominator? Lots of engineers</p>
+						</div>
+	
+					</section>
+	
+					<section>
+						<h2>Realtime Data is Hard</h2>
+						<p>
+							Keeping data in sync across thousands of clients
+						</p>
+						<div class="fragment">
+							<p>HTTP is request-response</p>
+							<p>The client is blind updates on the server</p>
+						</div>
+	
+					</section>
+	
+					<section>
+						<h4>Data Transport Solutions</h4>
+	
+						<div class="fragment">
+							<p class="text-medium">Polling</p>
+							<small class="text-small">Sending AJAX requests in regular intervals</small> <br />
+							<small class="text-small">Not option. It isn't efficient and will not scale</small>
+						</div>
+	
+						<div class="fragment">
+							<p class="text-medium">Server Sent Events</p>
+							<small class="text-small">Push data to the browser</small> <br />
+							<small class="text-small">Better, but still not ideal. Poor browser support</small>
+						</div>
+	
+						<div class="fragment">
+							<p class="text-medium">Websockets</p>
+							<small class="text-small">Two-way data push</small> <br />
+							<small class="text-small">Ideal for transport, but they're just the messenger</small>
+						</div>
+	
+					</section>
+	
+					<section>
+						<p class="text-medium">Data transport is only a small part of the problem</p>
+						<p class="text-small">Realtime message passing !== Realtime data sync</p>
+						<p class="text-small fragment"></p>
+						<!-- <p class="text-medium">The real issue is fast data sync across multiple clients</p> -->
+					</section>
+					
+			        <section>
+			          <img src="img/simple-api.png" alt="" class="no-style">
+			        </section>
+			
+			        <section>
+			          <h2>Real-time Data</h2>
+			          <p class="era-point text-cream">
+			            Whenever <span class="text-discs">data is  updated on the server</span>,
+			            it sends the update down to every <span class="text-tarheel">listening client</span>
+			          </p>
+			        </section>
+			
+			        <section>
+			          <img src="img/realtime-api.png" alt="" class="no-style" style="max-width: 85%;">
+			        </section>
+					
+				</section>
+				
+				<section>
+					<section>
+						<h2>Ok, so how do we build a real-time API?</h2>
+						<div class="fragment">
+							<p>1. You need a language: <em>Node.js</em></p>
+						</div>						
+						<div class="fragment">
+							<p>2. You need a database: <em>LevelDB</em></p>
+						</div>
+						<div class="fragment">
+							<p>3. You need a real-time transport: <em>Socket.io</em></p>
+						</div>
+						<div class="fragment">
+							<p>4. You need a client-side client library: <em>Browserify</em></p>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Now the fun begins :)</h2>
+			          <img src="img/party.gif" alt="" class="no-style" style="max-width: 85%;">
+					</section>
+				</section>
+				
 				<section>
 					<section>
 						<h1>why might I want to use node?</h1>
@@ -213,21 +349,15 @@ While Roger likes to work with a variety of programming languages and platforms,
 						<h1>Build your first node app</h1>
 					</section>
 					<section>
-						<h3>Declare Your Dependencies</h3>
-						<p>1. Create your package.json file</p>
+						<p>Create your package.json file</p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 npm init
 npm install express --save
 npm install body-parser --save
 npm install method-override --save
 						</code></pre>
-						<p>2. Install dependencies</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
-npm install
-						</code></pre>
 					</section>
 					<section>
-						<h3>3. Build your skeleton</h3>
 						<p>Create a file called <code>server.js</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var express = require('express');
@@ -252,14 +382,18 @@ server.listen(app.get('port'), function(){
 						</code></pre>
 					</section>
 					<section>
-						<h2>Test your app</h2>
-						<pre><code data-bespoke-autorun class="language-javascript">
+						<div class="fragment">
+							<h2>Test your app</h2>
+							<pre><code data-bespoke-autorun class="language-javascript">
 node server.js
-						</code></pre>
-						<p>Open your app in the browser:</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<p>Open your app in the browser:</p>
+							<pre><code data-bespoke-autorun class="language-javascript">
 http://localhost:5000/
-						</code></pre>
+							</code></pre>
+						</div>
 					</section>
 				</section>
 
@@ -305,26 +439,26 @@ http://localhost:5000/
 					<section class="full-imgs">
 						<h2>LevelDB</h2><br><br>
 						<div>
-						<div style="width: 40%; float: right; display: inline-block; text-align: left;">basic features:
-						<ul>
-						<li data-bespoke-bullet>get</li>
-						<li data-bespoke-bullet>put</li>
-						<li data-bespoke-bullet>del</li>
-						<li data-bespoke-bullet>batch</li>
-						<li data-bespoke-bullet>ordered iterator</li>
-						</ul>
+							<div style="width: 40%; float: right; display: inline-block; text-align: left;">basic features:
+							<ul>
+								<li class="fragment">get</li>
+								<li class="fragment">put</li>
+								<li class="fragment">del</li>
+								<li class="fragment">batch</li>
+								<li class="fragment">ordered iterator</li>
+							</ul>
+							</div>
+							<div style="background:#fff; width: 50%; display: inline-block; float: left;"><img src="img/example_leveldb.png"></div>
 						</div>
-						<div style="background:#fff; width: 50%; display: inline-block; float: left;"><img src="img/example_leveldb.png"></div>
-						</div>
-						</section>
-						<section>
+					</section>
+					<section>
 						<h2>LevelUp</h2>
 						<h3>
 						The Node.js binding for LevelDB,
 						let's build our database in Javascript!
 						</h3>
-						</section>
-						<section>
+					</section>
+					<section>
 						<h2>LevelUp</h2>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var db = level('your_database')
@@ -336,8 +470,8 @@ db.put('a', 'b', function() {
 	})
 })
 						</code></pre>
-						</section>
-						<section>
+					</section>
+					<section>
 						<h2>ReadStream</h2>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var db = level('your_database')
@@ -369,8 +503,7 @@ stream.on('end', function() {
 						<h2>Let's put some LevelUP and Express together.</h2>
 					</section>
 					<section>
-						<h3>Declare Your Dependencies</h3>
-						<p>1. Create your package.json file</p>
+						<p>Create your package.json file</p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 npm init
 npm install express --save
@@ -379,13 +512,8 @@ npm install leveldown --save
 npm install body-parser --save
 npm install method-override --save
 						</code></pre>
-						<p>2. Install dependencies</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
-npm install
-						</code></pre>
 					</section>
 					<section>
-						<h3>3. Build your skeleton</h3>
 						<p>Create a file called <code>server.js</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var express = require('express');
@@ -433,14 +561,18 @@ server.listen(app.get('port'), function(){
 						<pre><code data-bespoke-autorun class="language-javascript">
 node server.js
 						</code></pre>
-						<p>Test POST</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
+						<div class="fragment">
+							<p>Test POST</p>
+							<pre><code data-bespoke-autorun class="language-javascript">
 curl -X POST -d '{"name":"data from curl"}' -H "Content-Type:application/json" http://localhost:5000/data/somekey
-						</code></pre>
-						<p>GET the key somekey:</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<p>GET the key somekey:</p>
+							<pre><code data-bespoke-autorun class="language-javascript">
 curl -x GET http://localhost:5000/data/somekey/data/somekey
-						</code></pre>
+							</code></pre>
+						</div>
 					</section>
 					<section>
 						<h2>It Works!!!</h2>
@@ -485,8 +617,7 @@ curl -x GET http://localhost:5000/data/somekey/data/somekey
 						<h2>Let's add some socket.io to our app.</h2>
 					</section>
 					<section>
-						<h3>Declare Your Dependencies</h3>
-						<p>1. Create your package.json file</p>
+						<p>Create your package.json file</p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 npm init
 npm install express --save
@@ -496,13 +627,8 @@ npm install body-parser --save
 npm install method-override --save
 npm install socket.io --save
 						</code></pre>
-						<p>2. Install dependencies</p>
-						<pre><code data-bespoke-autorun class="language-javascript">
-npm install
-						</code></pre>
 					</section>
 					<section>
-						<h3>3. Build your skeleton</h3>
 						<p>Create a file called <code>server.js</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 var express = require('express');
@@ -577,7 +703,7 @@ server.listen(app.get('port'), function(){
 						</code></pre>
 					</section>
 					<section>
-						<h3>4. Test Your App</h3>
+						<h3>Test Your App</h3>
 						<p>Create a file called <code>index.html:</code></p>
 						<pre><code data-bespoke-autorun class="language-javascript">
 &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js">&lt;/script>
@@ -588,7 +714,10 @@ server.listen(app.get('port'), function(){
 			"name":"Roger"	
 		};
 		chat.emit('set', {key: "test", data: json});
-		chat.on('value', function(data){
+		chat.emit('get', {key: "test", data: json}).on('value', function(data){
+			console.log( data );
+		});
+		chat.on('added', function(data){
 			console.log( data );
 		});
 	});
@@ -645,7 +774,127 @@ http://localhost:5000/
 					</section>
 					<section>
 						<p>We want to use browserify to build a client for our API that can work either client or server side.</p>
-						
+					</section>
+					<section>
+						<p>Create your package.json file</p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+npm init
+npm install express --save
+npm install levelup --save
+npm install leveldown --save
+npm install body-parser --save
+npm install method-override --save
+npm install socket.io --save
+npm install browserify --save
+npm install browserify-middleware --save
+npm install socket.io-client --save
+						</code></pre>
+					</section>
+					<section>
+						<p>Create a file called <code>server.js</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var levelup = require ('levelup');	
+var browserify = require('browserify-middleware');
+
+
+var database = './test';
+var db = levelup (database, {keyEncoding: 'json', valueEncoding: 'json'});
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({	extended: true	}));
+app.set('port', process.env.PORT || 5000);
+var server = require('http').Server(app);
+
+//	real-time socket listeners...
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+	socket.emit('news', { hello: 'world' });
+	socket.on('get', function (data) {
+		var key = data.key;
+		db.get(key, function(err, data) {
+			console.log( JSON.stringify(data) );
+			socket.emit('value', data );
+		});	
+	});
+
+	socket.on('set', function (data) {
+		var key = data.key;
+		var json = data.data;
+		
+		db.put(key, json, function() {
+			db.get(key, function(err, data) {
+				console.log( JSON.stringify(data) )
+				socket.emit('value', data );
+			});
+		});
+	});
+});
+
+
+//	api end points...
+
+app.get('/data/:key', function(request, response) {
+	var key = request.param('key');
+
+	db.get(key, function(err, data) {
+		response.send( JSON.stringify(data) );
+	})	
+});
+app.post('/data/:key', function(request, response) {
+	var key = request.param('key');
+	var json = request.body;
+
+	db.put(key, json, function() {
+		db.get(key, function(err, data) {
+			response.send( JSON.stringify(data) )
+		})
+	})
+});
+
+var browserifySrc = path.join(process.cwd(), 'client.js');
+app.use('/realtime.js', browserify(browserifySrc));
+
+app.get('/', function(request, response){
+	response.sendfile("./index.html" );
+});
+
+server.listen(app.get('port'), function(){
+	console.log("Express server listening on port " + app.get('port'));
+});
+						</code></pre>
+					</section>
+					<section>
+						<h3>Test Your App</h3>
+						<p>Create a file called <code>client.js:</code></p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+//	real-time socket listeners...
+var url = "http://localhost:" + process.env.PORT || 5000;
+var chat = require('socket.io-client')( url );
+
+chat.on('connect', function () {
+	var json = {
+		"name":"Roger"	
+	};
+	chat.emit('set', {key: "test", data: json});
+	chat.emit('get', {key: "test", data: json}).on('value', function(data){
+		console.log( data );
+	});
+	chat.on('added', function(data){
+		console.log( data );
+	});
+});
+						</code></pre>
+						<p>Open the app in your browser: </p>
+						<pre><code data-bespoke-autorun class="language-javascript">
+http://localhost:5000/realtime.js
+						</code></pre>
+						<p> You've now built a browerified library that can work the same in the browser as it does server-side.</p>
 					</section>
 				</section>
 
@@ -659,6 +908,9 @@ http://localhost:5000/
 					</section>
 					<section>
 						<p>Let's build some actual apps using our brand new API now</p>
+						<div class="fragment">
+							<p>Let's decide on something to build and we'll all build it together, this will let you become more familiar with your API, and see what it can do.</p>
+						</div>
 					</section>
 				</section>
 
