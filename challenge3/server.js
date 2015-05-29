@@ -17,6 +17,17 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
+	socket.on('getall', function (data){
+		db.createReadStream().on('data', function (data) {
+			socket.emit('value', data );
+		}).on('error', function (err) {
+			console.log('Oh my!', err)
+		}).on('close', function () {
+			console.log('Stream closed')
+		}).on('end', function () {
+			console.log('Stream closed')
+		})		
+	});
 	socket.on('get', function (data) {
 		var key = data.key;
 		db.get(key, function(err, data) {
